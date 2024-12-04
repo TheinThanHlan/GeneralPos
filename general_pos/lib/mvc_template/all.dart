@@ -8,3 +8,4 @@ export './interface/IMVCModel.dart';
 export './initialize.dart';
 export './GlobalConfig.dart';
 export './ResponsiveLayout.dart';
+export './GlobalUtils.dart';

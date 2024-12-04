@@ -7,6 +7,7 @@ import './Tablet.dart';
 
 class SalesPage extends StatelessWidget implements IMVCView {
   late final SalesController controller;
+  SalesPage(this.controller);
   @override
   Widget build(BuildContext context) {
     return responsiveLayout(

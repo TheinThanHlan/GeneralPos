@@ -86,7 +86,7 @@ class _Tablet extends State<Tablet> {
                 ),
               ),
               Expanded(
-                child: widget.controller.currentPage["page"],
+                child: widget.controller.currentPage["page"](),
               ),
             ],
           ),

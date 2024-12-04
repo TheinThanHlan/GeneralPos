@@ -42,7 +42,7 @@ class ManageInventoryController extends MVCController {
     return true;
   }
 
-  ManageInventoryController({required super.view}) {
+  ManageInventoryController() {
     resetData();
   }
   StringBuffer addErrorMessage = StringBuffer("");

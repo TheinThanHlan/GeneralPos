@@ -6,9 +6,10 @@ import 'package:general_pos/views/ManagePropertyNames/ManagePropertyNamesPage.da
 import 'package:general_pos/views/ManageInventory/ManageInventoryPage.dart';
 import 'package:general_pos/views/ManageTable/ManageTablePage.dart';
 import '../../mvc_template/abstract/MVCController.dart';
+import './ManagePage.dart';
 
-class ManageController extends MVCController {
-  ManageController({required super.view}) {
+class ManageController extends MVCController<ManagePage> {
+  ManageController() {
     currentPage = pages[3];
   }
   String greet = "Hello from ManagePage";

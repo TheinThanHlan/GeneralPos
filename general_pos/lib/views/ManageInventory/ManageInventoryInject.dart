@@ -3,7 +3,8 @@ import './ManageInventoryPage.dart';
 import 'package:get_it/get_it.dart';
 
 void injectManageInventory(GetIt getIt) {
-  getIt.registerSingleton(ManageInventoryPage());
-  getIt.registerSingleton(ManageInventoryController(view: getIt<ManageInventoryPage>()));
+  getIt.registerSingleton(ManageInventoryController());
+  getIt.registerSingleton(
+      ManageInventoryPage(getIt<ManageInventoryController>()));
   print("\t~>\tManageInventory injected;");
 }

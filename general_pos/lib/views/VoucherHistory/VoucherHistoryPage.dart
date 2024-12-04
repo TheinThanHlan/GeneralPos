@@ -7,6 +7,10 @@ import './Tablet.dart';
 
 class VoucherHistoryPage extends StatelessWidget implements IMVCView {
   late final VoucherHistoryController controller;
+  VoucherHistoryPage(this.controller) {
+    print("haha");
+    this.controller.isShowDetail = false;
+  }
   @override
   Widget build(BuildContext context) {
     return responsiveLayout(

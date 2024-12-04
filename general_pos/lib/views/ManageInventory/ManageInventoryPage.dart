@@ -7,6 +7,7 @@ import './Tablet.dart';
 
 class ManageInventoryPage extends StatelessWidget implements IMVCView {
   late final ManageInventoryController controller;
+  ManageInventoryPage(this.controller);
   @override
   Widget build(BuildContext context) {
     return responsiveLayout(

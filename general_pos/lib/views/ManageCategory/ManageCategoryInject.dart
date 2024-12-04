@@ -3,8 +3,8 @@ import './ManageCategoryPage.dart';
 import 'package:get_it/get_it.dart';
 
 void injectManageCategory(GetIt getIt) {
-  getIt.registerSingleton(ManageCategoryPage());
+  getIt.registerSingleton(ManageCategoryController());
   getIt.registerSingleton(
-      ManageCategoryController(view: getIt<ManageCategoryPage>()));
+      ManageCategoryPage(controller: getIt<ManageCategoryController>()));
   print("\t~>\tManageCategory injected;");
 }

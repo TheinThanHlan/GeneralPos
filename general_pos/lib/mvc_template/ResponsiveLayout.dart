@@ -7,7 +7,7 @@ Widget responsiveLayout({
   required Widget tablet,
 }) {
   double width = MediaQuery.of(context).size.width;
-  print(MediaQuery.of(context).size);
+  //print(MediaQuery.of(context).size);
   if (width <= 700) {
     return mobile;
   }

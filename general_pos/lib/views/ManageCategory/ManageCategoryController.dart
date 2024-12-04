@@ -7,7 +7,6 @@ import 'package:general_pos/views/Components/OCDialog/OCDialogModel.dart';
 import '../../mvc_template/abstract/MVCController.dart';
 
 class ManageCategoryController extends MVCController {
-  ManageCategoryController({required super.view});
   String greet = "Hello from ManageCategoryPage";
   //declare variables
   ValueNotifier ERROR_MESSAGE = ValueNotifier("");

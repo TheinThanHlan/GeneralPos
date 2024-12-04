@@ -1,11 +1,11 @@
 CREATE TABLE 'Order'(
 'id' INTEGER not null primary key      ,
 'voucher' INTEGER not null REFERENCES 'Voucher'('id')     ,
-'orderStatus' INTEGER not null REFERENCES 'OrderStatus'('id')     ,
 'deliveryAddress' INTEGER  REFERENCES 'Address'('id')     ,
 'orderDateTime' Text not null  Default   (datetime('now','localtime'))  ,
 'item' INTEGER not null REFERENCES 'Inventory'('id')     ,
-'qty' INTEGER not null  Default   0  
+'qty' INTEGER not null  Default   0  ,
+'totalBuyPrice' REAL       
 );
 --#-#
 CREATE TABLE 'ProductPropertyName'(
@@ -84,6 +84,11 @@ CREATE TABLE 'Template'(
 'createdDateTime' Text not null  Default   (datetime('now','localtime'))  
 );
 --#-#
+CREATE TABLE 'VoucherType'(
+'id' INTEGER not null primary key      ,
+'name' Text not null unique  Default   ""  
+);
+--#-#
 CREATE TABLE 'Voucher'(
 'id' INTEGER not null primary key      ,
 'name' Text       ,
@@ -95,6 +100,7 @@ CREATE TABLE 'Voucher'(
 'openedTime' Text not null  Default   (datetime('now','localtime'))  ,
 'closedTime' Text       ,
 'status' INTEGER not null REFERENCES 'VoucherStatus'('id')     ,
+'type' INTEGER not null REFERENCES 'VoucherType'('id')     ,
 Constraint name_or_table_can_null Check('name' is not null or 'table' is not null)
 );
 --#-#
@@ -160,6 +166,12 @@ CREATE TABLE 'Customer'(
 'id' INTEGER not null primary key      ,
 'user' INTEGER not null unique REFERENCES 'User'('id')     ,
 UNIQUE( 'user' )
+);
+--#-#
+CREATE TABLE '#_#_#Order_OrderStatus'(
+'orderId' INTEGER not null REFERENCES 'Order'('id')     ,
+'orderStatusId' INTEGER not null REFERENCES 'OrderStatus'('id')     ,
+UNIQUE( 'orderId','orderStatusId' )
 );
 --#-#
 CREATE TABLE '#_#_#ProductTemplate_ProductCategory'(

@@ -3,7 +3,7 @@ import './SideBarPage.dart';
 import 'package:get_it/get_it.dart';
 
 void injectSideBar(GetIt getIt) {
-  getIt.registerSingleton(SideBarPage());
-  getIt.registerSingleton(SideBarController(view: getIt<SideBarPage>()));
+  getIt.registerSingleton(SideBarController());
+  getIt.registerSingleton(SideBarPage(getIt<SideBarController>()));
   print("\t~>\tSideBar injected;");
 }

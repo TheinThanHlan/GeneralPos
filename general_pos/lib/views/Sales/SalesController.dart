@@ -3,7 +3,7 @@ import "package:flutter/widgets.dart";
 import "../../data/all.dart";
 
 class SalesController extends MVCController {
-  SalesController({required super.view}) {
+  SalesController() {
     resetAllData();
   }
   String greet = "Hello from SalesPage";
@@ -21,6 +21,7 @@ class SalesController extends MVCController {
       totalPrice: 0,
       discount: 0,
       status: VoucherStatus(name: ""),
+      type: VoucherType(name: ""),
     ),
   );
   double totalPrice = 0;
@@ -34,15 +35,22 @@ class SalesController extends MVCController {
       print(openedVouchersOfTable);
       tmp_name = (openedVouchersOfTable).toString();
     }
-    getIt<VoucherDao>().createNewVoucher(
+    getIt<VoucherDao>()
+        .createNewVoucher(
       Voucher(
         name: tmp_name,
         status: VoucherStatus(name: ""),
         discount: 0,
         totalPrice: 0,
         table: selectedTable,
+        type: VoucherType(id: 1, name: ""),
       ),
-    );
+    )
+        .then((x) {
+      print(x);
+    }).catchError((x) {
+      print(x.toString());
+    });
     return true;
   }
 

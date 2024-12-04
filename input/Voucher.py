@@ -95,5 +95,14 @@
             "dbAutoValue": False,
             "map": "ManyToOne",
         },
+        {
+            "name": "type",
+            "type": "VoucherType",
+            "default_value": "",
+            "optional": False,
+            "constraints": "not null",
+            "dbAutoValue": False,
+            "map": "ManyToOne",
+        },
     ],
 }

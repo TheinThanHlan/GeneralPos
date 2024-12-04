@@ -70,7 +70,7 @@ flutter:
     - assets/fonts/Myanmar3/
     - assets/fonts/Noto_Sans_Myanmar/
     - assets/fonts/Padauk-5.001/
-
+    - assets/icons/
   #   - images/a_dot_ham.jpeg
   fonts:
     - family: Padauk

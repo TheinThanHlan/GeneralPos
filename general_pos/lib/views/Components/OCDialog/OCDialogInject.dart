@@ -3,6 +3,6 @@ import './OCDialogModel.dart';
 import 'package:get_it/get_it.dart';
 
 void injectOCDialog(GetIt getIt) {
-  getIt.registerSingleton(OCDialogComponent());
+  getIt.registerFactory(() => OCDialogComponent());
   print("\t~>\tOCDialog injected;");
 }

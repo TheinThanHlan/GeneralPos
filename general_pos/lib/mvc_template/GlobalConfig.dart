@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 class GlobalConfig {
+  final double padding_1 = 21;
   final double top_bar = 55;
   final textStyle = TextStyle(fontSize: 13);
   final warningTextStyle =
@@ -20,4 +21,5 @@ class GlobalConfig {
     style: BorderStyle.solid,
   );
   final table_cell_padding = EdgeInsets.only(right: 2, left: 2);
+  final double text_box_height = 55;
 }

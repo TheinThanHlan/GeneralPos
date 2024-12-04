@@ -3,7 +3,7 @@ import './SalesPage.dart';
 import 'package:get_it/get_it.dart';
 
 void injectSales(GetIt getIt) {
-  getIt.registerSingleton(SalesPage());
-  getIt.registerSingleton(SalesController(view: getIt<SalesPage>()));
+  getIt.registerSingleton(SalesController());
+  getIt.registerSingleton(SalesPage(getIt<SalesController>()));
   print("\t~>\tSales injected;");
 }

@@ -25,9 +25,13 @@ class InventoryDao extends InventoryGeneratedDao {
 
   Future<Map<int, Inventory>> searchWithName_like(String name) async {
     String sql = """
-  select i.id as iId,
+  select
+  i.id as iId,
+  i.UPC as iUPC,
+  i.SKU as iSKU,
   pt.id as ptId,pt.name as ptName,
   pp.'price' as ppCurrentPrice
+
 
   from Inventory i
   inner join ProductTemplate pt on pt.id=i.productTemplate
@@ -39,6 +43,8 @@ class InventoryDao extends InventoryGeneratedDao {
     for (var a in tmp) {
       output[a['iId']] = Inventory(
         id: a['iId'],
+        UPC: a['iUPC'],
+        SKU: a['iSKU'],
         currentPrice: ProductPrice(price: a["ppCurrentPrice"]),
         qty: 0,
         productTemplate: ProductTemplate(name: a['ptName']),
@@ -53,6 +59,8 @@ class InventoryDao extends InventoryGeneratedDao {
   Future<List<Inventory>> readFromProductTemplateId(int id) async {
     String sql = """
   select i.id as iId,
+ i.SKU as iSKU,
+  i.UPC as iUPC,
   pt.id as ptId,pt.name as ptName,
   pp.'price' as ppCurrentPrice
 
@@ -66,6 +74,8 @@ class InventoryDao extends InventoryGeneratedDao {
     for (var a in tmp) {
       output.add(Inventory(
         id: a['iId'],
+        SKU: a['iSKU'],
+        UPC: a['iUPC'],
         currentPrice: ProductPrice(price: a["ppCurrentPrice"] ?? 0),
         qty: 0,
         productTemplate: ProductTemplate(name: a['ptName']),

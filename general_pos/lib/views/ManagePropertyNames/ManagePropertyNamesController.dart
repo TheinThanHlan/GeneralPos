@@ -4,7 +4,7 @@ import 'package:general_pos/data/all.dart';
 import '../../mvc_template/abstract/MVCController.dart';
 
 class ManagePropertyNamesController extends MVCController {
-  ManagePropertyNamesController({required super.view});
+  ManagePropertyNamesController();
   String greet = "Hello from ManagePropertyNamesPage";
 
   var searchController = TextEditingController();

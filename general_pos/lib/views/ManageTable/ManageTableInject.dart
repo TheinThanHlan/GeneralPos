@@ -3,7 +3,7 @@ import './ManageTablePage.dart';
 import 'package:get_it/get_it.dart';
 
 void injectManageTable(GetIt getIt) {
-  getIt.registerSingleton(ManageTablePage());
-  getIt.registerSingleton(ManageTableController(view: getIt<ManageTablePage>()));
+  getIt.registerSingleton(ManageTableController());
+  getIt.registerSingleton(ManageTablePage(getIt<ManageTableController>()));
   print("\t~>\tManageTable injected;");
 }

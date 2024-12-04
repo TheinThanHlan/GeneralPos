@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
   <diagram name="Page-1" id="_ZwgQ4hGKMNue7Y76wZm">
-    <mxGraphModel dx="2463" dy="1594" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="4310" dy="2790" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -187,13 +187,13 @@
         <mxCell id="SKHpmg1jaREUuWERE6yB-2" value="Category" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="310" y="247.5" width="200" height="105" as="geometry" />
         </mxCell>
-        <mxCell id="RAKmdfoq-PCC5c8KJ4ON-1" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="RAKmdfoq-PCC5c8KJ4ON-1" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="240" y="1120" width="180" height="800" as="geometry" />
         </mxCell>
-        <mxCell id="RAKmdfoq-PCC5c8KJ4ON-2" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="RAKmdfoq-PCC5c8KJ4ON-2" value="" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="280" y="1150" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="RAKmdfoq-PCC5c8KJ4ON-3" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="RAKmdfoq-PCC5c8KJ4ON-3" value="" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="280" y="1240" width="120" height="60" as="geometry" />
         </mxCell>
       </root>

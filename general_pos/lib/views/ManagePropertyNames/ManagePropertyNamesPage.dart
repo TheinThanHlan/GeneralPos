@@ -7,6 +7,7 @@ import './Tablet.dart';
 
 class ManagePropertyNamesPage extends StatelessWidget implements IMVCView {
   late final ManagePropertyNamesController controller;
+  ManagePropertyNamesPage(this.controller);
   @override
   Widget build(BuildContext context) {
     return responsiveLayout(

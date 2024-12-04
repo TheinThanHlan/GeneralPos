@@ -14,6 +14,7 @@ getIt.registerSingleton(PhoneNumberDao());
 getIt.registerSingleton(SalaryDao());
 getIt.registerSingleton(AddressDao());
 getIt.registerSingleton(TemplateDao());
+getIt.registerSingleton(VoucherTypeDao());
 getIt.registerSingleton(VoucherDao());
 getIt.registerSingleton(InventoryDao());
 getIt.registerSingleton(DeliveryMethodDao());

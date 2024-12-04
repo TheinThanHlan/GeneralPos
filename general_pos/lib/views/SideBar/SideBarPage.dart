@@ -7,6 +7,7 @@ import './Desktop.dart';
 
 class SideBarPage extends StatelessWidget implements IMVCView {
   late final SideBarController controller;
+  SideBarPage(this.controller);
   @override
   Widget build(BuildContext context) {
     return responsiveLayout(

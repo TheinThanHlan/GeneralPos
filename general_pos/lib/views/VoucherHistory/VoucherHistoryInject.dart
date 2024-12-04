@@ -3,7 +3,8 @@ import './VoucherHistoryPage.dart';
 import 'package:get_it/get_it.dart';
 
 void injectVoucherHistory(GetIt getIt) {
-  getIt.registerSingleton(VoucherHistoryPage());
-  getIt.registerSingleton(VoucherHistoryController(view: getIt<VoucherHistoryPage>()));
+  getIt.registerSingleton(VoucherHistoryController());
+  getIt
+      .registerSingleton(VoucherHistoryPage(getIt<VoucherHistoryController>()));
   print("\t~>\tVoucherHistory injected;");
 }

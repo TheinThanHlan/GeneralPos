@@ -9,7 +9,9 @@ import "package:general_pos/views/ManageInventory/ManageInventoryInject.dart";
 import "package:general_pos/views/Sales/SalesInject.dart";
 import "package:general_pos/views/ManageTable/ManageTableInject.dart";
 import "package:general_pos/views/VoucherHistory/VoucherHistoryInject.dart";
+import 'package:general_pos/views/Buy/BuyInject.dart';
 import './GlobalConfig.dart';
+import './GlobalUtils.dart';
 import './MVCDatabaseProvider.dart';
 import 'package:get_it/get_it.dart';
 import '../data/InjectData.dart';
@@ -17,13 +19,16 @@ import '../data/InjectData.dart';
 final GetIt getIt = GetIt.I;
 Future<void> init_injection_container() async {
   getIt.registerSingleton(await MVCDatabaseProvider().getDatabase());
-  await getIt.registerSingleton(GlobalConfig());
+  getIt.registerSingleton(GlobalConfig());
+  getIt.registerSingleton(GlobalUtils());
+
   injectData(getIt);
   await initComponents();
   await initPages();
 }
 
 Future<void> initPages() async {
+  injectBuy(getIt);
   injectVoucherHistory(getIt);
   injectSales(getIt);
   injectManageInventory(getIt);

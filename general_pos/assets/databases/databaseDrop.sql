@@ -37,6 +37,9 @@ Drop Table IF EXISTS 'Address';
 Drop Table IF EXISTS 'Template';
 
 --#-#
+Drop Table IF EXISTS 'VoucherType';
+
+--#-#
 Drop Table IF EXISTS 'Voucher';
 
 --#-#
@@ -68,6 +71,9 @@ Drop Table IF EXISTS 'ServingTable';
 
 --#-#
 Drop Table IF EXISTS 'Customer';
+
+--#-#
+Drop Table IF EXISTS '#_#_#Order_OrderStatus';
 
 --#-#
 Drop Table IF EXISTS '#_#_#ProductTemplate_ProductCategory';

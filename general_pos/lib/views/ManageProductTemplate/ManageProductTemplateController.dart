@@ -4,7 +4,7 @@ import 'package:general_pos/data/all.dart';
 import '../../mvc_template/abstract/MVCController.dart';
 
 class ManageProductTemplateController extends MVCController {
-  ManageProductTemplateController({required super.view}) {
+  ManageProductTemplateController() {
     resetAllFields();
   }
   String greet = "Hello from ManageProductTemplatePage";

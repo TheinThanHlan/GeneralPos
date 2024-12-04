@@ -25,6 +25,7 @@ class _Tablet extends State<Tablet> {
       children: [
         Expanded(
           flex: 13,
+          //top buttons
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -75,33 +76,35 @@ class _Tablet extends State<Tablet> {
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                child: Container(
-                  child: OutlinedButton(
-                    onPressed: () {
-                      if (widget
-                              .controller.addEditTmpInventory.productTemplate !=
-                          null) {
-                        openAddInventoryOCDialog().then((_) {
-                          widget.controller.resetData();
-                          //int tmp = widget
-                          //    .controller.currentProductTemplateIdNoti.value;
-                          //widget.controller.currentProductTemplateIdNoti.value =
-                          //    10;
-                          //widget.controller.currentProductTemplateIdNoti.value =
-                          //    tmp;
-                          setState(() {});
-                        });
-                      }
-                    },
-                    child: Text("Register Inventory"),
+              if (widget.controller.currentProductTemplateIdNoti.value != 0)
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  child: Container(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        if (widget.controller.addEditTmpInventory
+                                .productTemplate !=
+                            null) {
+                          openAddInventoryOCDialog().then((_) {
+                            widget.controller.resetData();
+                            //int tmp = widget
+                            //    .controller.currentProductTemplateIdNoti.value;
+                            //widget.controller.currentProductTemplateIdNoti.value =
+                            //    10;
+                            //widget.controller.currentProductTemplateIdNoti.value =
+                            //    tmp;
+                            setState(() {});
+                          });
+                        }
+                      },
+                      child: Text("Register Inventory"),
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),
+        //warning message
         Expanded(
           flex: 5,
           child: Container(
@@ -117,6 +120,7 @@ class _Tablet extends State<Tablet> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              //product templates
               FutureBuilder(
                 future: getIt<ProductTemplateDao>().readAllWithSearch(
                     search: widget.controller.searchController.text),
@@ -162,195 +166,271 @@ class _Tablet extends State<Tablet> {
                       future: getIt<InventoryDao>()
                           .readFromProductTemplateId(value),
                       builder: (context, snapshot) {
-                        if (snapshot.data != null) {
+                        if (snapshot.data != null &&
+                            snapshot.data!.isNotEmpty) {
                           return Expanded(
-                            flex: 100 - 34,
-                            child: SingleChildScrollView(
-                              padding: EdgeInsets.symmetric(horizontal: 5),
-                              child: Table(
-                                border: TableBorder.all(
-                                    width: 0.4, color: Colors.black12),
-                                columnWidths: {
-                                  0: FlexColumnWidth(8),
-                                  1: FlexColumnWidth(55),
-                                  2: FlexColumnWidth(100 - 63 - 21),
-                                  3: FlexColumnWidth(21),
-                                },
-                                children: [
-                                  TableRow(children: [
-                                    TableCell(
-                                        child: Text("No.",
-                                            textAlign: TextAlign.center),
-                                        verticalAlignment:
-                                            TableCellVerticalAlignment.middle),
-                                    TableCell(
-                                        verticalAlignment:
-                                            TableCellVerticalAlignment.middle,
-                                        child: Text(
-                                          " Property",
-                                        )),
-                                    TableCell(
-                                        verticalAlignment:
-                                            TableCellVerticalAlignment.middle,
-                                        child: Text("Price",
-                                            textAlign: TextAlign.center)),
-                                    TableCell(child: Container(height: 34))
-                                  ]),
-                                  ...snapshot.data!.indexed.map(
-                                    (j) {
-                                      var (index, a) = j;
-                                      return TableRow(
-                                        children: [
-                                          TableCell(
-                                            child: Text(
-                                                (index + 1).toString() + ".",
-                                                textAlign: TextAlign.right),
-                                            verticalAlignment:
-                                                TableCellVerticalAlignment
-                                                    .middle,
-                                          ),
-                                          TableCell(
-                                            verticalAlignment:
-                                                TableCellVerticalAlignment
-                                                    .middle,
-                                            child: Table(
-                                              columnWidths: {
-                                                0: FlexColumnWidth(55),
-                                                1: FlexColumnWidth(13),
-                                                2: FlexColumnWidth(
-                                                    100 - 55 - 13)
-                                              },
-                                              defaultVerticalAlignment:
-                                                  TableCellVerticalAlignment
-                                                      .middle,
-                                              children: [
-                                                ...a.productProperties!.map(
-                                                  (b) => TableRow(
-                                                    children: [
-                                                      TableCell(
-                                                        child: Container(
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal: 1,
-                                                                  vertical: 8),
-                                                          child: Text(b
-                                                              .productPropertyName
-                                                              .name),
-                                                        ),
-                                                      ),
-                                                      TableCell(
-                                                        child: Container(
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  vertical: 8),
-                                                          child: Text("="),
-                                                        ),
-                                                      ),
-                                                      TableCell(
-                                                        child: Container(
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal: 1,
-                                                                  vertical: 8),
-                                                          child: Text(
-                                                            b.value,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          TableCell(
+                              flex: 100 - 34,
+                              child: SingleChildScrollView(
+                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                child: Table(
+                                  border: getIt<GlobalConfig>().table_border,
+                                  columnWidths: {
+                                    0: FlexColumnWidth(8),
+                                    1: FlexColumnWidth(55),
+                                    2: FlexColumnWidth(100 - 63 - 21),
+                                    3: FlexColumnWidth(34),
+                                  },
+                                  children: [
+                                    TableRow(children: [
+                                      TableCell(
+                                          child: Text("No.",
+                                              textAlign: TextAlign.center),
+                                          verticalAlignment:
+                                              TableCellVerticalAlignment
+                                                  .middle),
+                                      TableCell(
+                                          verticalAlignment:
+                                              TableCellVerticalAlignment.middle,
+                                          child: Text(
+                                            " Property",
+                                          )),
+                                      TableCell(
+                                          verticalAlignment:
+                                              TableCellVerticalAlignment.middle,
+                                          child: Text("Price",
+                                              textAlign: TextAlign.center)),
+                                      TableCell(child: Container(height: 34))
+                                    ]),
+                                    ...snapshot.data!.indexed.map(
+                                      (j) {
+                                        var (index, a) = j;
+                                        return TableRow(
+                                          children: [
+                                            TableCell(
+                                              child: Text(
+                                                  (index + 1).toString() + ".",
+                                                  textAlign: TextAlign.right),
                                               verticalAlignment:
                                                   TableCellVerticalAlignment
                                                       .middle,
-                                              child: Text(
-                                                  a.currentPrice.price
-                                                      .toString(),
-                                                  textAlign: TextAlign.end)),
-                                          TableCell(
-                                              child: ButtonBar(children: [
-                                            //delete Inventory
-                                            IconButton(
-                                                icon: Icon(Icons.delete),
-                                                onPressed: () {
-                                                  getIt<InventoryDao>()
-                                                      .delete(a.id!)
-                                                      .then((x) {
-                                                    setState(() {});
-                                                  });
-                                                }),
-                                            //edit the price of the product
-                                            IconButton(
-                                                icon: Icon(Icons.edit),
-                                                onPressed: () {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (context) {
-                                                        var tmpTextControllerForPriceChange =
-                                                            TextEditingController();
-                                                        return AlertDialog(
-                                                          title: Text(
-                                                              "Change Price"),
-                                                          content: TextFormField(
-                                                              controller:
-                                                                  tmpTextControllerForPriceChange,
-                                                              decoration:
-                                                                  InputDecoration(
-                                                                      label: Text(
-                                                                          "Price"))),
-                                                          actions: [
-                                                            ButtonBar(
-                                                              children: [
-                                                                OutlinedButton(
-                                                                    child: Text(
-                                                                        "cancel"),
-                                                                    onPressed:
-                                                                        () {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
-                                                                    }),
-                                                                OutlinedButton(
-                                                                    child: Text(
-                                                                        "Ok"),
-                                                                    onPressed:
-                                                                        () {
-                                                                      if (tmpTextControllerForPriceChange
-                                                                          .text
-                                                                          .isNotEmpty) {
-                                                                        getIt<ProductPriceDao>()
-                                                                            .addNewPrice(
-                                                                          ProductPrice(
-                                                                              price: int.parse(tmpTextControllerForPriceChange.text),
-                                                                              Inventory_mappedBy_prices: a),
-                                                                        )
-                                                                            .then((_) {
-                                                                          Navigator.of(context)
-                                                                              .pop();
-                                                                          setState(
-                                                                              () {});
-                                                                        });
-                                                                      }
-                                                                    }),
-                                                              ],
-                                                            )
-                                                          ],
-                                                        );
-                                                      });
-                                                }),
-                                          ])),
-                                        ],
-                                      );
-                                    },
-                                  ).toList()
-                                ],
-                              ),
-                            ),
-                          );
+                                            ),
+                                            TableCell(
+                                              verticalAlignment:
+                                                  TableCellVerticalAlignment
+                                                      .middle,
+                                              child: Table(
+                                                columnWidths: {
+                                                  0: FlexColumnWidth(34),
+                                                  1: FlexColumnWidth(3),
+                                                  2: FlexColumnWidth(
+                                                      100 - 34 - 3)
+                                                },
+                                                defaultVerticalAlignment:
+                                                    TableCellVerticalAlignment
+                                                        .middle,
+                                                children: [
+                                                  ...a.productProperties!.map(
+                                                    (b) => TableRow(
+                                                      children: [
+                                                        TableCell(
+                                                          child: Container(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        1,
+                                                                    vertical:
+                                                                        8),
+                                                            child: Text(b
+                                                                .productPropertyName
+                                                                .name),
+                                                          ),
+                                                        ),
+                                                        TableCell(
+                                                          child: Container(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    vertical:
+                                                                        8),
+                                                            child: Text("="),
+                                                          ),
+                                                        ),
+                                                        TableCell(
+                                                          child: Container(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        1,
+                                                                    vertical:
+                                                                        8),
+                                                            child: Text(
+                                                              b.value,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  //UPC
+                                                  if (a.UPC != null)
+                                                    TableRow(
+                                                      children: [
+                                                        TableCell(
+                                                          child: Container(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        1,
+                                                                    vertical:
+                                                                        8),
+                                                            child: Text("UPC"),
+                                                          ),
+                                                        ),
+                                                        TableCell(
+                                                          child: Container(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    vertical:
+                                                                        8),
+                                                            child: Text("="),
+                                                          ),
+                                                        ),
+                                                        TableCell(
+                                                          child: Container(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        1,
+                                                                    vertical:
+                                                                        8),
+                                                            child: Text(a.UPC!),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+
+                                                  //SKU
+                                                  if (a.SKU != null)
+                                                    TableRow(
+                                                      children: [
+                                                        TableCell(
+                                                          child: Container(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        1,
+                                                                    vertical:
+                                                                        8),
+                                                            child: Text("SKU"),
+                                                          ),
+                                                        ),
+                                                        TableCell(
+                                                          child: Container(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    vertical:
+                                                                        8),
+                                                            child: Text("="),
+                                                          ),
+                                                        ),
+                                                        TableCell(
+                                                          child: Container(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        1,
+                                                                    vertical:
+                                                                        8),
+                                                            child: Text(a.SKU!),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                ],
+                                              ),
+                                            ),
+                                            TableCell(
+                                                verticalAlignment:
+                                                    TableCellVerticalAlignment
+                                                        .middle,
+                                                child: Text(
+                                                    a.currentPrice.price
+                                                        .toString(),
+                                                    textAlign: TextAlign.end)),
+                                            TableCell(
+                                                child: ButtonBar(children: [
+                                              //delete Inventory
+                                              IconButton(
+                                                  icon: Icon(Icons.delete),
+                                                  onPressed: () {
+                                                    getIt<InventoryDao>()
+                                                        .delete(a.id!)
+                                                        .then((x) {
+                                                      setState(() {});
+                                                    });
+                                                  }),
+                                              //edit the price of the product
+                                              IconButton(
+                                                  icon: Icon(Icons.edit),
+                                                  onPressed: () {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          var tmpTextControllerForPriceChange =
+                                                              TextEditingController();
+                                                          return AlertDialog(
+                                                            title: Text(
+                                                                "Change Price"),
+                                                            content: TextFormField(
+                                                                controller:
+                                                                    tmpTextControllerForPriceChange,
+                                                                decoration: InputDecoration(
+                                                                    label: Text(
+                                                                        "Price"))),
+                                                            actions: [
+                                                              ButtonBar(
+                                                                children: [
+                                                                  OutlinedButton(
+                                                                      child: Text(
+                                                                          "cancel"),
+                                                                      onPressed:
+                                                                          () {
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      }),
+                                                                  OutlinedButton(
+                                                                      child: Text(
+                                                                          "Ok"),
+                                                                      onPressed:
+                                                                          () {
+                                                                        if (tmpTextControllerForPriceChange
+                                                                            .text
+                                                                            .isNotEmpty) {
+                                                                          getIt<ProductPriceDao>()
+                                                                              .addNewPrice(
+                                                                            ProductPrice(
+                                                                                price: int.parse(tmpTextControllerForPriceChange.text),
+                                                                                Inventory_mappedBy_prices: a),
+                                                                          )
+                                                                              .then((_) {
+                                                                            Navigator.of(context).pop();
+                                                                            setState(() {});
+                                                                          });
+                                                                        }
+                                                                      }),
+                                                                ],
+                                                              )
+                                                            ],
+                                                          );
+                                                        });
+                                                  }),
+                                            ])),
+                                          ],
+                                        );
+                                      },
+                                    ).toList()
+                                  ],
+                                ),
+                              ));
                         }
                         return Container();
                       });
@@ -384,47 +464,6 @@ class _Tablet extends State<Tablet> {
               Table(
                 defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                 children: [
-                  /*
-                  TableRow(
-                    children: [
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: tbl_col_padding),
-                        child: Text("Choose Product"),
-                      ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: tbl_col_padding),
-                        width: 144,
-                        child: FutureBuilder(
-                          future: getIt<ProductTemplateDao>().readAll(),
-                          builder: (context, dataSnapshot) {
-                            if (dataSnapshot.data != null) {
-                              return DropdownMenu(
-                                onSelected: (a) {
-                                  widget.controller.addEditTmpInventory
-                                      .productTemplate = a!;
-                                },
-                                width: 144,
-                                dropdownMenuEntries: dataSnapshot.data!
-                                    .map(
-                                      (a) => DropdownMenuEntry(
-                                        label: "${a.name}",
-                                        value: a,
-                                      ),
-                                    )
-                                    .toList(),
-                              );
-                            } else {
-                              return Container();
-                            }
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  */
-
                   TableRow(
                     children: [
                       Container(
@@ -438,11 +477,57 @@ class _Tablet extends State<Tablet> {
                         child: TextFormField(
                           keyboardType: TextInputType.number,
                           onChanged: (a) {
-                            widget.controller.addEditTmpInventory.currentPrice
-                                .price = int.parse(a);
+                            try {
+                              widget.controller.addEditTmpInventory.currentPrice
+                                  .price = int.parse(a);
+                            } on FormatException catch (e) {}
                           },
                           decoration: InputDecoration(),
                           textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: tbl_col_padding),
+                        child: Text("Bar Code (UPC)"),
+                      ),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: tbl_col_padding),
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          onChanged: (a) {
+                            widget.controller.addEditTmpInventory.UPC =
+                                a.trim().replaceAll(" ", "");
+                          },
+                          decoration: InputDecoration(),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ],
+                  ),
+                  TableRow(
+                    children: [
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: tbl_col_padding),
+                        child: Text("Custom Bar Code (SKU)"),
+                      ),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: tbl_col_padding),
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          onChanged: (a) {
+                            widget.controller.addEditTmpInventory.SKU =
+                                a.trim().replaceAll(" ", "");
+                          },
+                          decoration: InputDecoration(),
+                          textAlign: TextAlign.left,
                         ),
                       ),
                     ],

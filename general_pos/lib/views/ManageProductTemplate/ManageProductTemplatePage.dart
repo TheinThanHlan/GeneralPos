@@ -7,6 +7,7 @@ import './Tablet.dart';
 
 class ManageProductTemplatePage extends StatelessWidget implements IMVCView {
   late final ManageProductTemplateController controller;
+  ManageProductTemplatePage(this.controller);
   @override
   Widget build(BuildContext context) {
     return responsiveLayout(

@@ -25,5 +25,7 @@ Future<List<Order>> searchWith_orderDateTime(DateTime orderDateTime) async {List
 }
 Future<List<Order>> searchWith_qty(int qty) async {List tmp=await db.query('Order',where:"qty=$qty");return tmp.map((value)=>Order.fromJson(value)).toList();
 }
+Future<List<Order>> searchWith_totalBuyPrice(double totalBuyPrice) async {List tmp=await db.query('Order',where:"totalBuyPrice=$totalBuyPrice");return tmp.map((value)=>Order.fromJson(value)).toList();
+}
 
 }

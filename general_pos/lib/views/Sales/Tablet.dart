@@ -83,8 +83,14 @@ class _Tablet extends State<Tablet> {
               Expanded(
                 flex: 100 - 5,
                 child: FutureBuilder(
-                  future: getIt<VoucherDao>().searchWith_table_name_like(
-                      widget.controller.searchController.text),
+                  future: getIt<VoucherDao>().search(Voucher(
+                    table: ServingTable(
+                        name: widget.controller.searchController.text),
+                    totalPrice: 0,
+                    discount: 0,
+                    status: VoucherStatus(name: ""),
+                    type: VoucherType(id: 1, name: ""),
+                  )),
                   builder: (context, snapshot) {
                     if (snapshot.data != null) {
                       return StatefulBuilder(
@@ -173,6 +179,8 @@ class _Tablet extends State<Tablet> {
                                                     discount: 0,
                                                     status:
                                                         VoucherStatus(name: ""),
+                                                    type: VoucherType(
+                                                        id: 0, name: ""),
                                                   );
                                                   widget.controller
                                                       .resetAllData();
@@ -251,7 +259,10 @@ class _Tablet extends State<Tablet> {
                         child: FutureBuilder(
                           future: getIt<OrderDao>()
                               .readOrdersWith_voucher_searchWith_productTemplateName(
-                                  value, ""),
+                                  value, "")
+                              .catchError((e, s) {
+                            print(e);
+                          }),
                           builder: (context, snapshot) {
                             return SingleChildScrollView(
                               child: Table(
@@ -567,9 +578,8 @@ class _Tablet extends State<Tablet> {
                                             TableCellVerticalAlignment.middle,
                                         columnWidths: {
                                           0: FlexColumnWidth(55),
-                                          1: FlexColumnWidth(13),
-                                          2: FlexColumnWidth(8),
-                                          3: FlexColumnWidth(100 - 13 - 8 - 55)
+                                          //1: FlexColumnWidth(13),
+                                          1: FlexColumnWidth(100 - 55)
                                         },
                                         children: [
                                           for (var a in snapshot.data!.entries)
@@ -584,13 +594,11 @@ class _Tablet extends State<Tablet> {
                                                           .toList()
                                                           .join(" "),
                                                 ),
-                                                Text(
-                                                  a.value.currentPrice.price
-                                                      .toString(),
-                                                  textAlign: TextAlign.right,
-                                                ),
-                                                Text("",
-                                                    textAlign: TextAlign.right),
+                                                // Text(
+                                                //   a.value.currentPrice.price
+                                                //       .toString(),
+                                                //   textAlign: TextAlign.right,
+                                                // ),
                                                 ButtonBar(
                                                   children: [
                                                     IconButton(
@@ -629,86 +637,79 @@ class _Tablet extends State<Tablet> {
                             ),
                             Expanded(
                               child: Container(
+                                height: double.maxFinite,
                                 decoration: BoxDecoration(
                                     border: Border(
                                   top: getIt<GlobalConfig>()
                                       .sepreate_border_side,
                                 )),
-                                child: Container(
-                                  child: ValueListenableBuilder(
-                                    valueListenable:
-                                        widget.controller.addedOrders,
-                                    builder: (context, value, child) {
-                                      return SingleChildScrollView(
-                                        child: Table(
-                                          defaultVerticalAlignment:
-                                              TableCellVerticalAlignment.middle,
-                                          columnWidths: {
-                                            0: FlexColumnWidth(55),
-                                            1: FlexColumnWidth(13),
-                                            2: FlexColumnWidth(8),
-                                            3: FlexColumnWidth(
-                                                100 - 13 - 8 - 55)
-                                          },
-                                          children: [
-                                            for (var a in value.entries)
-                                              TableRow(
-                                                children: [
-                                                  Text(
-                                                    a
-                                                            .value
-                                                            .item
-                                                            .productTemplate!
-                                                            .name +
-                                                        " " +
-                                                        a.value.item
-                                                            .productProperties!
-                                                            .map((b) => b.value)
-                                                            .toList()
-                                                            .join(" "),
-                                                  ),
-                                                  Text(
-                                                    a.value.item.currentPrice
-                                                        .price
-                                                        .toString(),
-                                                    textAlign: TextAlign.right,
-                                                  ),
-                                                  Text(a.value.qty.toString(),
-                                                      textAlign:
-                                                          TextAlign.right),
-                                                  ButtonBar(
-                                                    children: [
-                                                      IconButton(
-                                                        onPressed: () {
-                                                          widget.controller
-                                                              .substractOrder(
-                                                                  a.key);
-                                                        },
-                                                        icon: Icon(
-                                                            Icons
-                                                                .exposure_minus_1,
-                                                            color: Colors.red),
-                                                      ),
-                                                      IconButton(
-                                                        onPressed: () {
-                                                          widget.controller
-                                                              .addNewOrder(
-                                                            MapEntry(a.key,
-                                                                a.value.item),
-                                                          );
-                                                        },
-                                                        icon: Icon(Icons
-                                                            .exposure_plus_1),
-                                                      ),
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  ),
+                                child: ValueListenableBuilder(
+                                  valueListenable:
+                                      widget.controller.addedOrders,
+                                  builder: (context, value, child) {
+                                    return SingleChildScrollView(
+                                      child: Table(
+                                        defaultVerticalAlignment:
+                                            TableCellVerticalAlignment.middle,
+                                        columnWidths: {
+                                          0: FlexColumnWidth(55),
+                                          1: FlexColumnWidth(13),
+                                          2: FlexColumnWidth(100 - 13 - 55)
+                                        },
+                                        children: [
+                                          for (var a in value.entries)
+                                            TableRow(
+                                              children: [
+                                                Text(
+                                                  a.value.item.productTemplate!
+                                                          .name +
+                                                      " " +
+                                                      a.value.item
+                                                          .productProperties!
+                                                          .map((b) => b.value)
+                                                          .toList()
+                                                          .join(" "),
+                                                ),
+                                                //  Text(
+                                                //    a.value.item.currentPrice
+                                                //        .price
+                                                //        .toString(),
+                                                //    textAlign: TextAlign.right,
+                                                //  ),
+                                                Text(a.value.qty.toString(),
+                                                    textAlign: TextAlign.right),
+                                                ButtonBar(
+                                                  children: [
+                                                    IconButton(
+                                                      onPressed: () {
+                                                        widget.controller
+                                                            .substractOrder(
+                                                                a.key);
+                                                      },
+                                                      icon: Icon(
+                                                          Icons
+                                                              .exposure_minus_1,
+                                                          color: Colors.red),
+                                                    ),
+                                                    IconButton(
+                                                      onPressed: () {
+                                                        widget.controller
+                                                            .addNewOrder(
+                                                          MapEntry(a.key,
+                                                              a.value.item),
+                                                        );
+                                                      },
+                                                      icon: Icon(Icons
+                                                          .exposure_plus_1),
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                        ],
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             ),
