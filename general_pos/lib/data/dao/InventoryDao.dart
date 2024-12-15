@@ -24,7 +24,8 @@ class InventoryDao extends InventoryGeneratedDao {
   }
 
   Future<Map<int, Inventory>> searchWithName_like(String name) async {
-    String sql = """
+    String sql = "";
+    sql = """
   select
   i.id as iId,
   i.UPC as iUPC,
@@ -96,5 +97,36 @@ class InventoryDao extends InventoryGeneratedDao {
         .db
         .delete("'#_#_#Inventory_ProductProperty'", where: "inventoryId=$id");
     await this.db.delete("Inventory", where: "id=$id");
+  }
+
+  Future<List<Inventory>> readLike(Inventory inventory) async {
+    String sql = """
+  select i.id as iId,
+ i.SKU as iSKU,
+  i.UPC as iUPC,
+  pt.id as ptId,pt.name as ptName,
+  pp.'price' as ppCurrentPrice
+
+  from Inventory i
+  inner join ProductTemplate pt on pt.id=i.productTemplate
+  left join ProductPrice pp on pp.id=i.currentPrice
+  where pt.id = ${inventory.productTemplate!.id} order by ppCurrentPrice desc
+  """;
+    List tmp = await db.rawQuery(sql);
+    List<Inventory> output = [];
+    for (var a in tmp) {
+      output.add(Inventory(
+        id: a['iId'],
+        SKU: a['iSKU'],
+        UPC: a['iUPC'],
+        currentPrice: ProductPrice(price: a["ppCurrentPrice"] ?? 0),
+        qty: 0,
+        productTemplate: ProductTemplate(name: a['ptName']),
+        productProperties:
+            await getIt<ProductPropertyDao>().readFromInventoryId(a['iId']),
+      ));
+    }
+
+    return output;
   }
 }

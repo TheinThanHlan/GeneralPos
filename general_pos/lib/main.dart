@@ -14,11 +14,11 @@ void main() {
       theme: globalTheme,
       debugShowCheckedModeBanner: false,
     );
-    runApp(mainApp);
-    //runApp(
-    //  //un comment this if you want to release
-    //  //mainApp
-    //  DevicePreview(builder: (context) => mainApp),
-    //);
+    //runApp(mainApp);
+    runApp(
+      //un comment this if you want to release
+      //mainApp
+      DevicePreview(builder: (context) => mainApp),
+    );
   });
 }

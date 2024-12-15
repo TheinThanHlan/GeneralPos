@@ -21,6 +21,8 @@ return Inventory.fromJson(t[0]);
 }return null;}
 Future<List<Inventory>> readAll() async {List tmp = await db.query("Inventory");return tmp.map((value) => Inventory.fromJson(value)).toList();
 }
+Future<List<Inventory>> searchWith_nameToShowInVoucher(String nameToShowInVoucher) async {List tmp=await db.query('Inventory',where:"nameToShowInVoucher=\"$nameToShowInVoucher\"");return tmp.map((value)=>Inventory.fromJson(value)).toList();
+}
 Future<List<Inventory>> searchWith_qty(int qty) async {List tmp=await db.query('Inventory',where:"qty=$qty");return tmp.map((value)=>Inventory.fromJson(value)).toList();
 }
 Future<List<Inventory>> searchWith_SKU(String SKU) async {List tmp=await db.query('Inventory',where:"SKU=\"$SKU\"");return tmp.map((value)=>Inventory.fromJson(value)).toList();

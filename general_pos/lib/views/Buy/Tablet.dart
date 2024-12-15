@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../mvc_template/all.dart';
 import './BuyController.dart';
 import '../../data/all.dart';
+import '../Ordering/all.dart';
+import 'package:data_table_2/data_table_2.dart';
 
 class Tablet extends StatefulWidget {
   late final BuyController controller;
@@ -76,7 +78,6 @@ class _Tablet extends State<Tablet> {
                                   onTap: () {
                                     widget.controller.currentVoucher.value =
                                         snapshot.data![a];
-                                    widget.controller.resetData();
                                     voucherListViewSetState(() {});
                                   },
                                 )
@@ -95,7 +96,7 @@ class _Tablet extends State<Tablet> {
         ValueListenableBuilder(
             valueListenable: widget.controller.currentVoucher,
             builder: (context, value, child) {
-              if (value != null) {
+              if (value != null && value.id != 0) {
                 return Expanded(
                   child: Container(
                     child: Column(
@@ -105,26 +106,287 @@ class _Tablet extends State<Tablet> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Container(
-                                padding: EdgeInsets.only(
-                                    right: getIt<GlobalConfig>().padding_1),
-                                child: OutlinedButton(
-                                  child: Text("Add Order"),
+                              ButtonBar(children: [
+                                OutlinedButton(
+                                  child: Text("Close Voucher",
+                                      style: getIt<GlobalConfig>().textStyle),
                                   onPressed: () {
-                                    openAddOrderDialog();
+                                    //double check the closing voucher with show dialog
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          content: Text(
+                                              "ဘောင်ချာအား ပိတ်မည် \n Close voucher"),
+                                          actions: [
+                                            OutlinedButton(
+                                                child: Text("Cancel"),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                }),
+                                            OutlinedButton(
+                                              child: Text("Ok"),
+                                              onPressed: () {
+                                                getIt<VoucherDao>()
+                                                    .closeVoucherIfAllOrderStatusIs(
+                                                        widget
+                                                            .controller
+                                                            .currentVoucher
+                                                            .value!,
+                                                        6)
+                                                    .then(
+                                                  (a) {
+                                                    if (a != 0) {
+                                                      widget
+                                                          .controller
+                                                          .currentVoucher
+                                                          .value = Voucher(
+                                                        id: 0,
+                                                        totalPrice: 0,
+                                                        discount: 0,
+                                                        status: VoucherStatus(
+                                                            name: ""),
+                                                        type: VoucherType(
+                                                            id: 0, name: ""),
+                                                      );
+                                                    } else {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(SnackBar(
+                                                              content: Text(
+                                                                  "Order အားလုံး ငွေရှင်းပြီးမှသာ Voucher အားပိတ်ရန် ခွင့်ပြုသည်။")));
+                                                    }
+                                                    Navigator.of(context).pop();
+                                                    setState(() {});
+                                                  },
+                                                );
+                                              },
+                                            )
+                                          ],
+                                        );
+                                      },
+                                    );
                                   },
                                 ),
-                              ),
+                                //add order button
+                                Container(
+                                  padding: EdgeInsets.only(
+                                      right: getIt<GlobalConfig>().padding_1),
+                                  child: OutlinedButton(
+                                    child: Text("Order"),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              getIt<OrderingPage>(
+                                            param1: OrderingModel(
+                                                currentVoucher: value),
+                                          ),
+                                        ),
+                                      )
+                                          .then((_) {
+                                        setState(() {});
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ]),
                             ],
                           ),
                         ),
-                        Expanded(child: Container(color: Colors.green)),
+                        //add
+                        FutureBuilder(
+                          future: getIt<OrderDao>()
+                              .readOrdersWith_voucher_searchWith_productTemplateName2(
+                                  value, ""),
+                          builder: (context, snapshot) {
+                            if (snapshot.data != null) {
+                              List<TableRow> row = [];
+                              List<Order> tmpData = snapshot.data ?? [];
+                              for (int a = 0; a < snapshot.data!.length; a++) {
+                                row.add(TableRow(children: [
+                                  Padding(
+                                    padding: getIt<GlobalConfig>()
+                                        .table_cell_padding,
+                                    child: Text((a + 1).toString() + ".",
+                                        textAlign: TextAlign.end),
+                                  ),
+                                  Padding(
+                                    padding: getIt<GlobalConfig>()
+                                        .table_cell_padding,
+                                    child: Text(getIt<GlobalUtils>()
+                                        .inventory_string_formatter(
+                                            tmpData[a].item)),
+                                  ),
+                                  Padding(
+                                    padding: getIt<GlobalConfig>()
+                                        .table_cell_padding,
+                                    child: Text(tmpData[a].qty.toString(),
+                                        textAlign: TextAlign.end),
+                                  ),
+                                  TextButton(
+                                    child: Text(tmpData[a].orderStatus.name),
+                                    onPressed: () {
+                                      int nextOrderStatus = widget.controller
+                                          .getNextStatusStep(tmpData[a]);
+                                      if (nextOrderStatus != 0) {
+                                        if (nextOrderStatus ==
+                                            widget.controller.orderStatusSteps
+                                                .last) {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  content: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        TextFormField(
+                                                          controller: widget
+                                                              .controller
+                                                              .buyPriceInputController,
+                                                          decoration:
+                                                              InputDecoration(
+                                                            label: Text(
+                                                                "ကုန်စည် တစ်ခု ဝယ်စျေး"),
+                                                            //textinput clear text
+                                                          ),
+                                                        ),
+                                                      ]),
+                                                  actions: [
+                                                    TextButton(
+                                                      child: Text("Cancel"),
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                    ),
+                                                    TextButton(
+                                                      child: Text("Ok"),
+                                                      onPressed: () {
+                                                        if (widget
+                                                            .controller
+                                                            .buyPriceInputController
+                                                            .text
+                                                            .isNotEmpty) {
+                                                          getIt<OrderDao>()
+                                                              .updateBuyPrice(
+                                                                  tmpData[a],
+                                                                  widget
+                                                                      .controller
+                                                                      .buyPriceInputController
+                                                                      .text)
+                                                              .then((_) {
+                                                            getIt<OrderDao>()
+                                                                .changeOrderStatus(
+                                                              tmpData[a],
+                                                              nextOrderStatus,
+                                                            )
+                                                                .then((_) {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              setState(() {});
+                                                            });
+                                                          });
+                                                        }
+                                                      },
+                                                    )
+                                                  ],
+                                                );
+                                              });
+                                        } else {
+                                          getIt<OrderDao>()
+                                              .changeOrderStatus(
+                                            tmpData[a],
+                                            nextOrderStatus,
+                                          )
+                                              .then((_) {
+                                            setState(() {});
+                                          });
+                                        }
+                                      } else {}
+                                    },
+                                  ),
+                                  ButtonBar(children: [
+                                    IconButton(
+                                        icon: Icon(Icons.delete),
+                                        onPressed: () {}),
+                                  ]),
+                                ]));
+                              }
+                              return Expanded(
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.vertical,
+                                  child: Table(
+                                    columnWidths: {
+                                      0: FixedColumnWidth(54),
+                                      1: FlexColumnWidth(54),
+                                      2: FixedColumnWidth(54),
+                                      3: FixedColumnWidth(144),
+                                      4: FixedColumnWidth(54),
+                                    },
+                                    border: getIt<GlobalConfig>().table_border,
+                                    defaultVerticalAlignment:
+                                        TableCellVerticalAlignment.middle,
+                                    children: [
+                                      TableRow(
+                                        children: [
+                                          //table heading
+                                          Padding(
+                                            padding: getIt<GlobalConfig>()
+                                                .table_cell_padding,
+                                            child: Text(
+                                              "စဉ်",
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: getIt<GlobalConfig>()
+                                                .table_cell_padding,
+                                            child: Text(
+                                              "ကုန်ပစ္စည်း အမည်",
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: getIt<GlobalConfig>()
+                                                .table_cell_padding,
+                                            child: Text(
+                                              textAlign: TextAlign.center,
+                                              "Qty.",
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: getIt<GlobalConfig>()
+                                                .table_cell_padding,
+                                            child: Text(
+                                              "Status",
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Container(
+                                            height: 34,
+                                          ),
+                                        ],
+                                      ),
+
+                                      //orders
+                                      ...row
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+                            return Expanded(child: Container());
+                          },
+                        ),
                       ],
                     ),
                   ),
                 );
               }
-              return Container();
+              return Expanded(child: Container());
             }),
       ],
     );
@@ -170,90 +432,12 @@ class _Tablet extends State<Tablet> {
                 OutlinedButton(
                     child: Text("Cancel"),
                     onPressed: () {
-                      widget.controller.resetData();
                       Navigator.of(context).pop();
                     }),
                 OutlinedButton(
                     child: Text("Ok"),
                     onPressed: () {
                       widget.controller.addVoucher().then((x) {
-                        widget.controller.resetData();
-                        Navigator.of(context).pop();
-                      });
-                    }),
-              ]);
-        });
-  }
-
-  //Order adding noti dialog
-  Future<void> openAddOrderDialog() {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-              title: Text("Order ပစ္စည်း အားရွေးချယ်ပါ"),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  //choose products
-                  Container(
-                    height: getIt<GlobalConfig>().text_box_height,
-                    child: FutureBuilder(
-                        future: getIt<ProductTemplateDao>().readAll(),
-                        builder: (context, snapshot) {
-                          if (snapshot.data != null &&
-                              snapshot.data!.isNotEmpty) {
-                            return DropdownMenu(
-                                width: double.maxFinite - 200,
-                                menuHeight: 144,
-                                label: Text("ကုန်စည်"),
-                                dropdownMenuEntries: snapshot.data!.map((e) {
-                                  return DropdownMenuEntry(
-                                      label: e.name, value: e);
-                                }).toList());
-                          }
-                          return Container();
-                        }),
-                  ),
-                  //choose size or something.
-                  ValueListenableBuilder(
-                      valueListenable: widget.controller.currentProductTemplate,
-                      builder: (context, value, child) {
-                        return Container(
-                          height: getIt<GlobalConfig>().text_box_height,
-                          child: FutureBuilder(
-                              future: getIt<InventoryDao>()
-                                  .readFromProductTemplateId(value.id!),
-                              builder: (context, snapshot) {
-                                if (snapshot.data != null &&
-                                    snapshot.data!.isNotEmpty) {
-                                  return DropdownMenu(
-                                      menuHeight: 144,
-                                      label: Text("select oroperties"),
-                                      dropdownMenuEntries:
-                                          snapshot.data!.map((e) {
-                                        return DropdownMenuEntry(
-                                            label: "hi", value: e);
-                                      }).toList());
-                                }
-                                return Container();
-                              }),
-                        );
-                      })
-                ],
-              ),
-              actions: [
-                OutlinedButton(
-                    child: Text("Cancel"),
-                    onPressed: () {
-                      widget.controller.resetData();
-                      Navigator.of(context).pop();
-                    }),
-                OutlinedButton(
-                    child: Text("Ok"),
-                    onPressed: () {
-                      widget.controller.addVoucher().then((x) {
-                        widget.controller.resetData();
                         Navigator.of(context).pop();
                       });
                     }),

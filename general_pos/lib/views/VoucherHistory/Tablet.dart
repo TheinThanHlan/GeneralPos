@@ -31,7 +31,9 @@ class _Tablet extends State<Tablet> {
         //show list of vouchers
         if (!widget.controller.isShowDetail)
           FutureBuilder(
-            future: getIt<VoucherDao>().readClosedVouchers(),
+            future: getIt<VoucherDao>()
+                .readClosedVouchers()
+                .catchError((e) => print(e)),
             builder: (context, snapshot) {
               return Expanded(
                   child: SingleChildScrollView(
@@ -42,7 +44,6 @@ class _Tablet extends State<Tablet> {
                     border: getIt<GlobalConfig>().table_border,
                     columns: [
                       DataColumn(label: Text("No."), numeric: true),
-                      DataColumn(label: Text("Name")),
                       DataColumn(label: Text("Date Time")),
                       DataColumn(label: Text("Type")),
                       DataColumn(label: Text("Total")),
@@ -53,9 +54,9 @@ class _Tablet extends State<Tablet> {
                         for (int a = 0; a < snapshot.data!.length; a++)
                           DataRow(cells: [
                             DataCell(Text((a + 1).toString())),
-                            DataCell(Text(snapshot.data![a].table!.name)),
-                            DataCell(
-                                Text(snapshot.data![a].closedTime!.toString())),
+                            DataCell(Text(getIt<GlobalUtils>()
+                                .fDateTimeToDDMMYY_HMS(
+                                    snapshot.data![a].closedTime!))),
                             DataCell(
                                 Text(snapshot.data![a].type.name.toString())),
                             DataCell(
@@ -170,7 +171,7 @@ class _Tablet extends State<Tablet> {
                                   Padding(
                                     padding: getIt<GlobalConfig>()
                                         .table_cell_padding,
-                                    child: Text("Price",
+                                    child: Text(value.type.name + "စျေး",
                                         textAlign: TextAlign.center),
                                   ),
                                   Padding(
@@ -207,7 +208,9 @@ class _Tablet extends State<Tablet> {
                                         padding: getIt<GlobalConfig>()
                                             .table_cell_padding,
                                         child: Text(
-                                            inventory.currentPrice.price
+                                            (e.$2.value.buyPrice ??
+                                                    inventory
+                                                        .currentPrice.price)
                                                 .toString(),
                                             textAlign: TextAlign.right),
                                       ),

@@ -56,4 +56,23 @@ class ProductPropertyDao extends ProductPropertyGeneratedDao {
           id: a['id'], productPropertyName: name, value: a["value"]);
     }).toList();
   }
+
+  Future<List<ProductProperty>> readFromProductTemplateId(int id) async {
+    String sql = """
+    select p.id     as pId,
+           p.value  as pValue,
+           pn.id    as pnId,
+           pn.name  as pnName
+           from '#_#_#Inventory_ProductProperty' as ip
+           inner join ProductProperty as p on ip.'productPropertyId'=p.id
+           inner join ProductPropertyName as pn on p.productPropertyName=pn.id
+           inner join Inventory as i on i.id=ip.id
+    """;
+    List tmp = await db.rawQuery(sql);
+    List<ProductProperty> output = tmp.map((a) {
+      return ProductProperty(
+          id: a['pId'], value: a['pValue'], productPropertyName: a['pnName']);
+    }).toList();
+    return output;
+  }
 }

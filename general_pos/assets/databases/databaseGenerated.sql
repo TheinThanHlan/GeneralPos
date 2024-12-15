@@ -5,7 +5,7 @@ CREATE TABLE 'Order'(
 'orderDateTime' Text not null  Default   (datetime('now','localtime'))  ,
 'item' INTEGER not null REFERENCES 'Inventory'('id')     ,
 'qty' INTEGER not null  Default   0  ,
-'totalBuyPrice' REAL       
+'buyPrice' REAL       
 );
 --#-#
 CREATE TABLE 'ProductPropertyName'(
@@ -106,6 +106,7 @@ Constraint name_or_table_can_null Check('name' is not null or 'table' is not nul
 --#-#
 CREATE TABLE 'Inventory'(
 'id' INTEGER not null primary key      ,
+'nameToShowInVoucher' Text       ,
 'productTemplate' INTEGER not null REFERENCES 'ProductTemplate'('id')     ,
 'qty' INTEGER not null  Default   0  ,
 'SKU' Text unique      ,

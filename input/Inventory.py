@@ -11,6 +11,15 @@
             "map": "",
         },
         {
+            "name": "nameToShowInVoucher",
+            "type": "String",
+            "default_value": "",
+            "optional": True,
+            "constraints": "",
+            "dbAutoValue": False,
+            "map": "",
+        },
+        {
             "name": "productTemplate",
             "type": "ProductTemplate",
             "default_value": "",

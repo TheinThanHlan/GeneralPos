@@ -10,6 +10,7 @@ import "package:general_pos/views/Sales/SalesInject.dart";
 import "package:general_pos/views/ManageTable/ManageTableInject.dart";
 import "package:general_pos/views/VoucherHistory/VoucherHistoryInject.dart";
 import 'package:general_pos/views/Buy/BuyInject.dart';
+import 'package:general_pos/views/Ordering/all.dart';
 import './GlobalConfig.dart';
 import './GlobalUtils.dart';
 import './MVCDatabaseProvider.dart';
@@ -28,6 +29,7 @@ Future<void> init_injection_container() async {
 }
 
 Future<void> initPages() async {
+  injectOrdering(getIt);
   injectBuy(getIt);
   injectVoucherHistory(getIt);
   injectSales(getIt);

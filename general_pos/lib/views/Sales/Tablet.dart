@@ -6,6 +6,7 @@ import '../Components/OCDialog/OCDialogModel.dart';
 import '../Components/OCDialog/OCDialogComponent.dart';
 import '../Components/PrintVoucher/PrintVoucherModel.dart';
 import '../Components/PrintVoucher/PrintVoucherComponent.dart';
+import '../Ordering/all.dart';
 
 class Tablet extends StatefulWidget {
   late final SalesController controller;
@@ -107,7 +108,6 @@ class _Tablet extends State<Tablet> {
                                   onTap: () {
                                     widget.controller.currentVoucher.value =
                                         snapshot.data![a];
-                                    widget.controller.isAddOrder = false;
                                     widget.controller.resetAllData();
                                     voucherListViewSetState(() {});
                                   },
@@ -129,596 +129,346 @@ class _Tablet extends State<Tablet> {
             valueListenable: widget.controller.currentVoucher,
             builder: (context, value, child) {
               if (value.id != null) {
-                if (!widget.controller.isAddOrder) {
-                  return Column(
-                    children: [
-                      //top bar of the order
-                      Container(
-                        height: getIt<GlobalConfig>().top_bar,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              child: Text(
-                                  "Table : ${value.table!.name} ${value.name!}",
-                                  style: getIt<GlobalConfig>().titleTextStyle),
-                            ),
-                            ButtonBar(children: [
-                              OutlinedButton(
-                                child: Text("Close Voucher",
-                                    style: getIt<GlobalConfig>().textStyle),
-                                onPressed: () {
-                                  //double check the closing voucher with show dialog
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        content: Text(
-                                            "ဘောင်ချာအား ပိတ်မည် \n ဘောက်ချာအား ပိတ်မည် \n Close voucher"),
-                                        actions: [
-                                          OutlinedButton(
-                                              child: Text("Cancel"),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              }),
-                                          OutlinedButton(
-                                            child: Text("Ok"),
+                return Column(
+                  children: [
+                    //top bar of the order
+                    Container(
+                      height: getIt<GlobalConfig>().top_bar,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            child: Text(
+                                "Table : ${value.table!.name} ${value.name!}",
+                                style: getIt<GlobalConfig>().titleTextStyle),
+                          ),
+                          ButtonBar(children: [
+                            OutlinedButton(
+                              child: Text("Close Voucher",
+                                  style: getIt<GlobalConfig>().textStyle),
+                              onPressed: () {
+                                //double check the closing voucher with show dialog
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      content: Text(
+                                          "ဘောင်ချာအား ပိတ်မည် \n ဘောက်ချာအား ပိတ်မည် \n Close voucher"),
+                                      actions: [
+                                        OutlinedButton(
+                                            child: Text("Cancel"),
                                             onPressed: () {
-                                              getIt<VoucherDao>()
-                                                  .closeVoucher(widget
-                                                      .controller
-                                                      .currentVoucher
-                                                      .value)
-                                                  .then(
-                                                (a) {
-                                                  widget
-                                                      .controller
-                                                      .currentVoucher
-                                                      .value = Voucher(
-                                                    totalPrice: 0,
-                                                    discount: 0,
-                                                    status:
-                                                        VoucherStatus(name: ""),
-                                                    type: VoucherType(
-                                                        id: 0, name: ""),
-                                                  );
-                                                  widget.controller
-                                                      .resetAllData();
+                                              Navigator.of(context).pop();
+                                            }),
+                                        OutlinedButton(
+                                          child: Text("Ok"),
+                                          onPressed: () {
+                                            getIt<VoucherDao>()
+                                                .closeVoucher(widget.controller
+                                                    .currentVoucher.value)
+                                                .then(
+                                              (a) {
+                                                widget.controller.currentVoucher
+                                                    .value = Voucher(
+                                                  totalPrice: 0,
+                                                  discount: 0,
+                                                  status:
+                                                      VoucherStatus(name: ""),
+                                                  type: VoucherType(
+                                                      id: 0, name: ""),
+                                                );
+                                                widget.controller
+                                                    .resetAllData();
+                                                Navigator.of(context).pop();
+                                                setState(() {});
+                                              },
+                                            );
+                                          },
+                                        )
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                            OutlinedButton(
+                                child: Text("Print",
+                                    style: getIt<GlobalConfig>().textStyle),
+                                onPressed: () async {
+                                  widget.controller.currentVoucher.value
+                                      .ListOfOrder_mappedBy_voucher = (await getIt<
+                                              OrderDao>()
+                                          .readOrdersWith_voucher_searchWith_productTemplateName(
+                                              value, ""))
+                                      .values
+                                      .toList();
+                                  var printVoucherModel = PrintVoucherModel(
+                                      voucher: widget
+                                          .controller.currentVoucher.value,
+                                      totalPrice: await getIt<VoucherDao>()
+                                          .getTotalPrice(value));
+                                  if (printVoucherModel
+                                      .voucher
+                                      .ListOfOrder_mappedBy_voucher!
+                                      .isNotEmpty) {
+                                    getIt<PrintVoucherComponent>(
+                                            param1: printVoucherModel)
+                                        .printVoucher();
+                                  } else {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                            title: Text("သတိ"),
+                                            content: Text(
+                                                "Voucher အလွတ်အား print ထုတ်လို့မရပါ"),
+                                            actions: [
+                                              TextButton(
+                                                child: Text("OK"),
+                                                onPressed: () {
                                                   Navigator.of(context).pop();
-                                                  setState(() {});
                                                 },
-                                              );
-                                            },
-                                          )
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
+                                              ),
+                                            ]);
+                                      },
+                                    );
+                                  }
+                                }),
+                            OutlinedButton(
+                              child: Text(
+                                "Order",
+                                style: getIt<GlobalConfig>().textStyle,
                               ),
-                              OutlinedButton(
-                                  child: Text("Print",
-                                      style: getIt<GlobalConfig>().textStyle),
-                                  onPressed: () async {
-                                    widget.controller.currentVoucher.value
-                                            .ListOfOrder_mappedBy_voucher =
-                                        (await getIt<OrderDao>()
-                                                .readOrdersWith_voucher_searchWith_productTemplateName(
-                                                    value, ""))
-                                            .values
-                                            .toList();
-                                    var printVoucherModel = PrintVoucherModel(
-                                        voucher: widget
-                                            .controller.currentVoucher.value,
-                                        totalPrice: await getIt<VoucherDao>()
-                                            .getTotalPrice(value));
-                                    if (printVoucherModel
-                                        .voucher
-                                        .ListOfOrder_mappedBy_voucher!
-                                        .isNotEmpty) {
-                                      getIt<PrintVoucherComponent>(
-                                              param1: printVoucherModel)
-                                          .printVoucher();
-                                    } else {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                              title: Text("သတိ"),
-                                              content: Text(
-                                                  "Voucher အလွတ်အား print ထုတ်လို့မရပါ"),
-                                              actions: [
-                                                TextButton(
-                                                  child: Text("OK"),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                              ]);
-                                        },
-                                      );
-                                    }
-                                  }),
-                              OutlinedButton(
-                                child: Text(
-                                  "Order",
-                                  style: getIt<GlobalConfig>().textStyle,
-                                ),
-                                onPressed: () {
-                                  widget.controller.isAddOrder = true;
+                              onPressed: () {
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(
+                                        builder: (context) =>
+                                            getIt<OrderingPage>(
+                                                param1: OrderingModel(
+                                                    currentVoucher: value))))
+                                    .then((_) {
                                   setState(() {});
-                                },
-                              ),
-                            ]),
-                          ],
-                        ),
+                                });
+                              },
+                            ),
+                          ]),
+                        ],
                       ),
+                    ),
 
-                      //order list
-                      Expanded(
-                        child: FutureBuilder(
-                          future: getIt<OrderDao>()
-                              .readOrdersWith_voucher_searchWith_productTemplateName(
-                                  value, "")
-                              .catchError((e, s) {
-                            print(e);
-                          }),
-                          builder: (context, snapshot) {
-                            return SingleChildScrollView(
-                              child: Table(
-                                defaultVerticalAlignment:
-                                    TableCellVerticalAlignment.middle,
-                                columnWidths: {
-                                  0: FlexColumnWidth(8),
-                                  1: FlexColumnWidth(100 - 8 - 39),
-                                  2: FlexColumnWidth(13),
-                                  3: FlexColumnWidth(13),
-                                  4: FlexColumnWidth(13),
-                                },
-                                border: getIt<GlobalConfig>()
-                                    .table_border, //color: Colors.transparent),
-                                children: [
-                                  TableRow(children: [
-                                    Padding(
+                    //order list
+                    Expanded(
+                      child: FutureBuilder(
+                        future: getIt<OrderDao>()
+                            .readOrdersWith_voucher_searchWith_productTemplateName(
+                                value, "")
+                            .catchError((e, s) {
+                          print(e);
+                        }),
+                        builder: (context, snapshot) {
+                          return SingleChildScrollView(
+                            child: Table(
+                              defaultVerticalAlignment:
+                                  TableCellVerticalAlignment.middle,
+                              columnWidths: {
+                                0: FlexColumnWidth(8),
+                                1: FlexColumnWidth(100 - 8 - 39),
+                                2: FlexColumnWidth(13),
+                                3: FlexColumnWidth(13),
+                                4: FlexColumnWidth(13),
+                              },
+                              border: getIt<GlobalConfig>()
+                                  .table_border, //color: Colors.transparent),
+                              children: [
+                                TableRow(children: [
+                                  Padding(
+                                    padding: getIt<GlobalConfig>()
+                                        .table_cell_padding,
+                                    child: Text("No.",
+                                        textAlign: TextAlign.center),
+                                  ),
+                                  Padding(
+                                    padding: getIt<GlobalConfig>()
+                                        .table_cell_padding,
+                                    child: Text("name"),
+                                  ),
+                                  Padding(
+                                    padding: getIt<GlobalConfig>()
+                                        .table_cell_padding,
+                                    child: Text("Price",
+                                        textAlign: TextAlign.center),
+                                  ),
+                                  Padding(
+                                    padding: getIt<GlobalConfig>()
+                                        .table_cell_padding,
+                                    child: Text("QTY",
+                                        textAlign: TextAlign.center),
+                                  ),
+                                  Padding(
                                       padding: getIt<GlobalConfig>()
                                           .table_cell_padding,
-                                      child: Text("No.",
-                                          textAlign: TextAlign.center),
-                                    ),
-                                    Padding(
-                                      padding: getIt<GlobalConfig>()
-                                          .table_cell_padding,
-                                      child: Text("name"),
-                                    ),
-                                    Padding(
-                                      padding: getIt<GlobalConfig>()
-                                          .table_cell_padding,
-                                      child: Text("Price",
-                                          textAlign: TextAlign.center),
-                                    ),
-                                    Padding(
-                                      padding: getIt<GlobalConfig>()
-                                          .table_cell_padding,
-                                      child: Text("QTY",
-                                          textAlign: TextAlign.center),
-                                    ),
-                                    Padding(
+                                      child: Container(height: 34)),
+                                ]),
+                                if (snapshot.data != null)
+                                  ...snapshot.data!.entries.indexed.map((e) {
+                                    var inventory = e.$2.value.item;
+                                    return TableRow(children: [
+                                      Padding(
                                         padding: getIt<GlobalConfig>()
                                             .table_cell_padding,
-                                        child: Container(height: 34)),
-                                  ]),
-                                  if (snapshot.data != null)
-                                    ...snapshot.data!.entries.indexed.map((e) {
-                                      var inventory = e.$2.value.item;
-                                      return TableRow(children: [
-                                        Padding(
-                                          padding: getIt<GlobalConfig>()
-                                              .table_cell_padding,
-                                          child: Text(
-                                              (e.$1 + 1).toString() + ".",
-                                              textAlign: TextAlign.right),
+                                        child: Text((e.$1 + 1).toString() + ".",
+                                            textAlign: TextAlign.right),
+                                      ),
+                                      Padding(
+                                        padding: getIt<GlobalConfig>()
+                                            .table_cell_padding,
+                                        child: Text(
+                                          inventory.productTemplate!.name +
+                                              " " +
+                                              inventory.productProperties!
+                                                  .map((a) => " " + a.value)
+                                                  .join("\u0020"),
                                         ),
-                                        Padding(
-                                          padding: getIt<GlobalConfig>()
-                                              .table_cell_padding,
-                                          child: Text(
-                                            inventory.productTemplate!.name +
-                                                " " +
-                                                inventory.productProperties!
-                                                    .map((a) => " " + a.value)
-                                                    .join("\u0020"),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: getIt<GlobalConfig>()
-                                              .table_cell_padding,
-                                          child: Text(
-                                              inventory.currentPrice.price
-                                                  .toString(),
-                                              textAlign: TextAlign.right),
-                                        ),
-                                        Padding(
-                                          padding: getIt<GlobalConfig>()
-                                              .table_cell_padding,
-                                          child: Text(e.$2.value.qty.toString(),
-                                              textAlign: TextAlign.right),
-                                        ),
-                                        Padding(
-                                          padding: getIt<GlobalConfig>()
-                                              .table_cell_padding,
-                                          child: ButtonBar(
-                                            children: [
-                                              IconButton(
-                                                onPressed: () {
-                                                  //double check
-                                                  showDialog(
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return AlertDialog(
-                                                        content: Text("\"" +
-                                                            inventory
-                                                                .productTemplate!
-                                                                .name +
-                                                            "  " +
-                                                            inventory
-                                                                .productProperties!
-                                                                .map((a) =>
-                                                                    " " +
-                                                                    a.value)
-                                                                .join(
-                                                                    "\u0020") +
-                                                            "\" -1 ?"),
-                                                        actions: [
-                                                          OutlinedButton(
-                                                              child: Text(
-                                                                  "Cancel"),
-                                                              onPressed: () {
+                                      ),
+                                      Padding(
+                                        padding: getIt<GlobalConfig>()
+                                            .table_cell_padding,
+                                        child: Text(
+                                            inventory.currentPrice.price
+                                                .toString(),
+                                            textAlign: TextAlign.right),
+                                      ),
+                                      Padding(
+                                        padding: getIt<GlobalConfig>()
+                                            .table_cell_padding,
+                                        child: Text(e.$2.value.qty.toString(),
+                                            textAlign: TextAlign.right),
+                                      ),
+                                      Padding(
+                                        padding: getIt<GlobalConfig>()
+                                            .table_cell_padding,
+                                        child: ButtonBar(
+                                          children: [
+                                            IconButton(
+                                              onPressed: () {
+                                                //double check
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      content: Text("\"" +
+                                                          inventory
+                                                              .productTemplate!
+                                                              .name +
+                                                          "  " +
+                                                          inventory
+                                                              .productProperties!
+                                                              .map((a) =>
+                                                                  " " + a.value)
+                                                              .join("\u0020") +
+                                                          "\" -1 ?"),
+                                                      actions: [
+                                                        OutlinedButton(
+                                                            child:
+                                                                Text("Cancel"),
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            }),
+                                                        OutlinedButton(
+                                                          child: Text("Ok"),
+                                                          onPressed: () {
+                                                            getIt<OrderDao>()
+                                                                .insert(Order(
+                                                                    item:
+                                                                        inventory,
+                                                                    voucher: e
+                                                                        .$2
+                                                                        .value
+                                                                        .voucher,
+                                                                    orderStatus: e
+                                                                        .$2
+                                                                        .value
+                                                                        .orderStatus,
+                                                                    qty: -1))
+                                                                .then(
+                                                              (a) {
+                                                                widget
+                                                                    .controller
+                                                                    .resetAllData();
                                                                 Navigator.of(
                                                                         context)
                                                                     .pop();
-                                                              }),
-                                                          OutlinedButton(
-                                                            child: Text("Ok"),
-                                                            onPressed: () {
-                                                              getIt<OrderDao>()
-                                                                  .insert(Order(
-                                                                      item:
-                                                                          inventory,
-                                                                      voucher: e
-                                                                          .$2
-                                                                          .value
-                                                                          .voucher,
-                                                                      orderStatus: e
-                                                                          .$2
-                                                                          .value
-                                                                          .orderStatus,
-                                                                      qty: -1))
-                                                                  .then(
-                                                                (a) {
-                                                                  widget
-                                                                      .controller
-                                                                      .resetAllData();
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                  setState(
-                                                                      () {});
-                                                                },
-                                                              );
-                                                            },
-                                                          )
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                },
-                                                icon: Icon(
-                                                    Icons
-                                                        .exposure_minus_1_sharp,
-                                                    color:
-                                                        Colors.primaries.first),
-                                              ),
-                                            ],
-                                          ),
+                                                                setState(() {});
+                                                              },
+                                                            );
+                                                          },
+                                                        )
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              icon: Icon(
+                                                  Icons.exposure_minus_1_sharp,
+                                                  color:
+                                                      Colors.primaries.first),
+                                            ),
+                                          ],
                                         ),
-                                      ]);
-                                    }).toList()
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-
-                      //total price
-                      Container(
-                        height: getIt<GlobalConfig>().top_bar,
-                        decoration: BoxDecoration(
-                            border: Border(
-                                top: getIt<GlobalConfig>()
-                                    .sepreate_border_side)),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding:
-                                    getIt<GlobalConfig>().table_cell_padding,
-                                child: Text("Total Price = ",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600),
-                                    textAlign: TextAlign.center),
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding:
-                                    getIt<GlobalConfig>().table_cell_padding,
-                                child: FutureBuilder(
-                                    future: getIt<VoucherDao>().getTotalPrice(
-                                        widget.controller.currentVoucher.value),
-                                    builder: (context, snapshot) {
-                                      return Text(
-                                          snapshot.data != null
-                                              ? snapshot.data.toString() +
-                                                  " Kyats "
-                                              : "",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600),
-                                          textAlign: TextAlign.right);
-                                    }),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-
-                  //add Order component ----------------------------
-                } else {
-                  return Column(
-                    children: [
-                      Container(
-                        height: getIt<GlobalConfig>().top_bar,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              child: Text(
-                                  "Order :: Table : ${value.table!.name} ${value.name!}",
-                                  style: getIt<GlobalConfig>().titleTextStyle),
-                            ),
-                            ButtonBar(
-                              children: [
-                                OutlinedButton(
-                                    child: Text("Close",
-                                        style: getIt<GlobalConfig>().textStyle),
-                                    onPressed: () {
-                                      widget.controller.resetAllData();
-                                      widget.controller.isAddOrder = false;
-                                      setState(() {});
-                                    }),
-                                OutlinedButton(
-                                  child: Text(
-                                    "Ok",
-                                    style: getIt<GlobalConfig>().textStyle,
-                                  ),
-                                  onPressed: () {
-                                    widget.controller.insertOrders().then((x) {
-                                      widget.controller.isAddOrder = false;
-                                      widget.controller.resetAllData();
-                                      setState(() {});
-                                    });
-                                  },
-                                ),
+                                      ),
+                                    ]);
+                                  }).toList()
                               ],
                             ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+
+                    //total price
+                    Container(
+                      height: getIt<GlobalConfig>().top_bar,
+                      decoration: BoxDecoration(
+                          border: Border(
+                              top: getIt<GlobalConfig>().sepreate_border_side)),
+                      child: Row(
                         children: [
-                          Text(
-                            widget.controller.addOrderErrorMessage.toString(),
-                            style: getIt<GlobalConfig>().warningTextStyle,
+                          Expanded(
+                            child: Padding(
+                              padding: getIt<GlobalConfig>().table_cell_padding,
+                              child: Text("Total Price = ",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600),
+                                  textAlign: TextAlign.center),
+                            ),
                           ),
-                          Container(
-                            padding: EdgeInsets.only(right: 8),
-                            width: getIt<GlobalConfig>().width,
-                            child: TextFormField(
-                              controller:
-                                  widget.controller.addOrderSearchController,
-                              onChanged: (x) {
-                                if (widget.controller.addOrderSearchController
-                                    .text.isNotEmpty) {
-                                  widget.controller.addOrderErrorMessage
-                                      .clear();
-                                  widget.controller.addOrderErrorMessage
-                                      .write("Searched results");
-                                } else {
-                                  widget.controller.addOrderErrorMessage
-                                      .clear();
-                                }
-                                setState(() {});
-                              },
-                              decoration: InputDecoration(
-                                label: Text("Search"),
-                                //textinput clear text
-                                suffixIcon: InkWell(
-                                  child: Icon(Icons.clear),
-                                  onTap: () {
-                                    widget.controller.addOrderSearchController
-                                        .clear();
-                                    widget.controller.addOrderErrorMessage
-                                        .clear();
-                                    setState(() {});
-                                  },
-                                ),
-                              ),
+                          Expanded(
+                            child: Padding(
+                              padding: getIt<GlobalConfig>().table_cell_padding,
+                              child: FutureBuilder(
+                                  future: getIt<VoucherDao>().getTotalPrice(
+                                      widget.controller.currentVoucher.value),
+                                  builder: (context, snapshot) {
+                                    return Text(
+                                        snapshot.data != null
+                                            ? snapshot.data.toString() +
+                                                " Kyats "
+                                            : "",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600),
+                                        textAlign: TextAlign.right);
+                                  }),
                             ),
                           ),
                         ],
                       ),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: FutureBuilder(
-                                future: getIt<InventoryDao>()
-                                    .searchWithName_like(widget.controller
-                                        .addOrderSearchController.text),
-                                builder: (context, snapshot) {
-                                  if (snapshot.data != null) {
-                                    return SingleChildScrollView(
-                                      child: Table(
-                                        defaultVerticalAlignment:
-                                            TableCellVerticalAlignment.middle,
-                                        columnWidths: {
-                                          0: FlexColumnWidth(55),
-                                          //1: FlexColumnWidth(13),
-                                          1: FlexColumnWidth(100 - 55)
-                                        },
-                                        children: [
-                                          for (var a in snapshot.data!.entries)
-                                            TableRow(
-                                              children: [
-                                                Text(
-                                                  a.value.productTemplate!
-                                                          .name +
-                                                      " " +
-                                                      a.value.productProperties!
-                                                          .map((b) => b.value)
-                                                          .toList()
-                                                          .join(" "),
-                                                ),
-                                                // Text(
-                                                //   a.value.currentPrice.price
-                                                //       .toString(),
-                                                //   textAlign: TextAlign.right,
-                                                // ),
-                                                ButtonBar(
-                                                  children: [
-                                                    IconButton(
-                                                      onPressed: () {
-                                                        widget.controller
-                                                            .substractOrder(
-                                                                a.key);
-                                                      },
-                                                      icon: Icon(
-                                                          Icons
-                                                              .exposure_minus_1,
-                                                          color: Colors.red),
-                                                    ),
-                                                    IconButton(
-                                                      onPressed: () {
-                                                        widget.controller
-                                                            .addNewOrder(
-                                                          MapEntry(
-                                                              a.key, a.value),
-                                                        );
-                                                      },
-                                                      icon: Icon(Icons
-                                                          .exposure_plus_1),
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                        ],
-                                      ),
-                                    );
-                                  }
-                                  return Container();
-                                },
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                height: double.maxFinite,
-                                decoration: BoxDecoration(
-                                    border: Border(
-                                  top: getIt<GlobalConfig>()
-                                      .sepreate_border_side,
-                                )),
-                                child: ValueListenableBuilder(
-                                  valueListenable:
-                                      widget.controller.addedOrders,
-                                  builder: (context, value, child) {
-                                    return SingleChildScrollView(
-                                      child: Table(
-                                        defaultVerticalAlignment:
-                                            TableCellVerticalAlignment.middle,
-                                        columnWidths: {
-                                          0: FlexColumnWidth(55),
-                                          1: FlexColumnWidth(13),
-                                          2: FlexColumnWidth(100 - 13 - 55)
-                                        },
-                                        children: [
-                                          for (var a in value.entries)
-                                            TableRow(
-                                              children: [
-                                                Text(
-                                                  a.value.item.productTemplate!
-                                                          .name +
-                                                      " " +
-                                                      a.value.item
-                                                          .productProperties!
-                                                          .map((b) => b.value)
-                                                          .toList()
-                                                          .join(" "),
-                                                ),
-                                                //  Text(
-                                                //    a.value.item.currentPrice
-                                                //        .price
-                                                //        .toString(),
-                                                //    textAlign: TextAlign.right,
-                                                //  ),
-                                                Text(a.value.qty.toString(),
-                                                    textAlign: TextAlign.right),
-                                                ButtonBar(
-                                                  children: [
-                                                    IconButton(
-                                                      onPressed: () {
-                                                        widget.controller
-                                                            .substractOrder(
-                                                                a.key);
-                                                      },
-                                                      icon: Icon(
-                                                          Icons
-                                                              .exposure_minus_1,
-                                                          color: Colors.red),
-                                                    ),
-                                                    IconButton(
-                                                      onPressed: () {
-                                                        widget.controller
-                                                            .addNewOrder(
-                                                          MapEntry(a.key,
-                                                              a.value.item),
-                                                        );
-                                                      },
-                                                      icon: Icon(Icons
-                                                          .exposure_plus_1),
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                }
+                    ),
+                  ],
+                );
               }
               return Container();
             },

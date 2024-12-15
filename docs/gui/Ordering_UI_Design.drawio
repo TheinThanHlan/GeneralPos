@@ -1,0 +1,112 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/25.0.1 Chrome/128.0.6613.186 Electron/32.2.6 Safari/537.36" version="25.0.1">
+  <diagram name="Page-1" id="pO2dgZNejnxL_dmQg4zA">
+    <mxGraphModel dx="-1688" dy="-542" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="S1I0KcoA5isAzxnmUide-1" value="" style="rounded=0;whiteSpace=wrap;html=1;labelBackgroundColor=none;" parent="1" vertex="1">
+          <mxGeometry x="2580" y="1210" width="730" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="S1I0KcoA5isAzxnmUide-3" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="2580" y="1130" width="730" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-4" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=10;flowAnimation=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="2640" y="1169.71" as="sourcePoint" />
+            <mxPoint x="2600" y="1169.29" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="2610" y="1169.71" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-7" value="Add Order Page" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="2650" y="1145" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-9" value="Filter" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="2600" y="1230" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-15" value="Product Name" style="rounded=1;fillColor=#F1F2F4;strokeColor=none;html=1;whiteSpace=wrap;fontColor=#596780;align=left;fontSize=12;spacingLeft=10;sketch=0;" vertex="1" parent="1">
+          <mxGeometry x="2600" y="1270" width="140" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-16" value="" style="shape=triangle;direction=south;fillColor=#596780;strokeColor=none;html=1;sketch=0;" vertex="1" parent="ATNSLjloF4ORHS3URi1y-15">
+          <mxGeometry x="1" y="0.5" width="12" height="6" relative="1" as="geometry">
+            <mxPoint x="-20" y="-3" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-17" value="Product Properties" style="rounded=1;fillColor=#F1F2F4;strokeColor=none;html=1;whiteSpace=wrap;fontColor=#596780;align=left;fontSize=12;spacingLeft=10;sketch=0;" vertex="1" parent="1">
+          <mxGeometry x="2760" y="1270" width="140" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-18" value="" style="shape=triangle;direction=south;fillColor=#596780;strokeColor=none;html=1;sketch=0;" vertex="1" parent="ATNSLjloF4ORHS3URi1y-17">
+          <mxGeometry x="1" y="0.5" width="12" height="6" relative="1" as="geometry">
+            <mxPoint x="-20" y="-3" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-19" value="Choose Product" style="rounded=1;fillColor=#F1F2F4;strokeColor=none;html=1;whiteSpace=wrap;fontColor=#596780;align=left;fontSize=12;spacingLeft=10;sketch=0;" vertex="1" parent="1">
+          <mxGeometry x="2600" y="1350" width="300" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-20" value="" style="shape=triangle;direction=south;fillColor=#596780;strokeColor=none;html=1;sketch=0;" vertex="1" parent="ATNSLjloF4ORHS3URi1y-19">
+          <mxGeometry x="1" y="0.5" width="12" height="6" relative="1" as="geometry">
+            <mxPoint x="-20" y="-3" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-21" value="Please Choose Product" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="2600" y="1330" width="140" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-24" value="Add" style="rounded=1;fillColor=#0057D8;strokeColor=none;html=1;whiteSpace=wrap;fontColor=#ffffff;align=center;verticalAlign=middle;fontStyle=0;fontSize=12;sketch=0;" vertex="1" parent="1">
+          <mxGeometry x="3004" y="1350" width="86" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-26" value="Ok" style="rounded=1;fillColor=#0057D8;strokeColor=none;html=1;whiteSpace=wrap;fontColor=#ffffff;align=center;verticalAlign=middle;fontStyle=0;fontSize=12;sketch=0;" vertex="1" parent="1">
+          <mxGeometry x="3200" y="1153.5" width="86" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-27" value="Cancel" style="rounded=1;fillColor=#0057D8;strokeColor=none;html=1;whiteSpace=wrap;fontColor=#ffffff;align=center;verticalAlign=middle;fontStyle=0;fontSize=12;sketch=0;" vertex="1" parent="1">
+          <mxGeometry x="3090" y="1153.5" width="86" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-28" value="Pipe 5လက်မ" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="2600" y="1440" width="230" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-29" value="Name" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="2600" y="1400" width="330" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-30" value="No" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="3100" y="1400" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-31" value="50000 KS" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="2920" y="1351.5" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-32" value="10" style="text;html=1;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="3100" y="1440" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-33" value="---" style="rounded=1;fillColor=#0057D8;strokeColor=none;html=1;whiteSpace=wrap;fontColor=#ffffff;align=center;verticalAlign=middle;fontStyle=0;fontSize=12;sketch=0;" vertex="1" parent="1">
+          <mxGeometry x="3200" y="1438.5" width="40" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-37" value="+" style="rounded=1;fillColor=#0057D8;strokeColor=none;html=1;whiteSpace=wrap;fontColor=#ffffff;align=center;verticalAlign=middle;fontStyle=0;fontSize=12;sketch=0;" vertex="1" parent="1">
+          <mxGeometry x="3260" y="1438.5" width="40" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-38" value="Pipe 5လက်မ" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="2600" y="1481.5" width="230" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-39" value="10" style="text;html=1;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="3100" y="1481.5" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-40" value="---" style="rounded=1;fillColor=#0057D8;strokeColor=none;html=1;whiteSpace=wrap;fontColor=#ffffff;align=center;verticalAlign=middle;fontStyle=0;fontSize=12;sketch=0;" vertex="1" parent="1">
+          <mxGeometry x="3200" y="1480" width="40" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-41" value="+" style="rounded=1;fillColor=#0057D8;strokeColor=none;html=1;whiteSpace=wrap;fontColor=#ffffff;align=center;verticalAlign=middle;fontStyle=0;fontSize=12;sketch=0;" vertex="1" parent="1">
+          <mxGeometry x="3260" y="1480" width="40" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-42" value="Pipe 5လက်မ" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="2600" y="1521.5" width="230" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-43" value="10" style="text;html=1;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="3100" y="1521.5" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-44" value="---" style="rounded=1;fillColor=#0057D8;strokeColor=none;html=1;whiteSpace=wrap;fontColor=#ffffff;align=center;verticalAlign=middle;fontStyle=0;fontSize=12;sketch=0;" vertex="1" parent="1">
+          <mxGeometry x="3200" y="1520" width="40" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="ATNSLjloF4ORHS3URi1y-45" value="+" style="rounded=1;fillColor=#0057D8;strokeColor=none;html=1;whiteSpace=wrap;fontColor=#ffffff;align=center;verticalAlign=middle;fontStyle=0;fontSize=12;sketch=0;" vertex="1" parent="1">
+          <mxGeometry x="3260" y="1520" width="40" height="33" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

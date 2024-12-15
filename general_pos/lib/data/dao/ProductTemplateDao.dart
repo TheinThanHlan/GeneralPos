@@ -13,6 +13,19 @@ class ProductTemplateDao extends ProductTemplateGeneratedDao {
     return output;
   }
 
+  Future<List<ProductTemplate>> readWhereInventoryExists() async {
+    List<ProductTemplate> output = [];
+    String sql = """
+      Select distinct pt.* from 'ProductTemplate' pt
+      Inner Join 'Inventory' i on  pt.id=i.productTemplate;
+    """;
+    List tmp = await db.rawQuery(sql);
+    tmp.forEach((a) {
+      output.add(ProductTemplate.fromJson(a));
+    });
+    return output;
+  }
+
   Future<List<ProductTemplate>> searchWithName(String name) async {
     List tmp = await db.query("ProductTemplate", where: "name='$name'");
     return tmp.map((value) => ProductTemplate.fromJson(value)).toList();

@@ -65,7 +65,7 @@
             "map": "",
         },
         {
-            "name": "totalBuyPrice",
+            "name": "buyPrice",
             "type": "double",
             "default_value": "",
             "optional": True,

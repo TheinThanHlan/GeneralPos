@@ -24,7 +24,7 @@ class SideBarController extends MVCController {
       "icon": Icons.sell,
       "page": getIt<SalesPage>,
     },
-    // {"name": "စျေးစာရင်း", "icon": Icons.book, "page": getIt<BuyPage>},
+    {"name": "စျေးစာရင်း", "icon": Icons.book, "page": getIt<BuyPage>},
     {
       "name": "Manage",
       "icon": Icons.manage_accounts,
